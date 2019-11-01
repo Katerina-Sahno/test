@@ -1,0 +1,28 @@
+version: '3.1'
+
+services:
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+      - ./php:/var/www
+    links:
+      - php
+
+  php:
+    build: ./php
+    links:
+      - maria1
+
+  maria1:
+    build: ./maria1
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: qwerty
+      MYSQL_DATABASE: db1
+    volumes:
+      - ./database:/var/lib/mysql
